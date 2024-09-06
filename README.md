@@ -1,7 +1,7 @@
 This directory contains the code for the systematic literature review: 'Harnassing the power of artificial intelligence to generate adverse outcome pathways from existing literature'. The code is written in Python and uses the Dash library to create a web-based interface to facilitate the review process.
 1. Download the folder and use cd to navigate to it:
 ```bash
-git clone https://github.com/axelve26/Lit_review_code.git
+git clone https://github.com/axelve26/Lit_review.git
 cd ./<path>/<to>/Lit_review_code
 ```
 2. Create the lit_review environment with Conda based on the provided yaml file:
