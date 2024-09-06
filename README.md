@@ -2,7 +2,7 @@ This directory contains the code for the systematic literature review: 'Harnassi
 1. Download the folder and use cd to navigate to it:
 ```bash
 git clone https://github.com/axelve26/Lit_review.git
-cd ./<path>/<to>/Lit_review_code
+cd ./Lit_review_code
 ```
 2. Create the lit_review environment with Conda based on the provided yaml file:
 ```bash
