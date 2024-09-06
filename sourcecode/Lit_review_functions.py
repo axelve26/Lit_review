@@ -284,25 +284,27 @@ def get_bib(some_df):
         # if bib_text not in new_bibs:
         #     new_bibs.append(bib_text)
         titles.append(title)
-    if not os.path.exists('../review_query/References.bib'):
-        with open('../review_query/References.bib', 'w') as f:
+    if not os.path.exists('review_query'):
+        os.makedirs('review_query')
+    if not os.path.exists('review_query/References.bib'):
+        with open('review_query/References.bib', 'w') as f:
             f.write(bib_text)
     else:
-        with open('../review_query/References.bib', 'r') as f:
+        with open('review_query/References.bib', 'r') as f:
             content = f.read()
             if bib_text.strip() not in content:
-                with open('../review_query/References.bib', 'a') as f:
+                with open('review_query/References.bib', 'a') as f:
                     f.write('\n' + bib_text)
 
     # # print(bib_text)
-    if not os.path.exists('../review_query/References.txt'):
-        with open('../review_query/References.txt', 'w') as f:
+    if not os.path.exists('review_query/References.txt'):
+        with open('review_query/References.txt', 'w') as f:
             f.write(bib_text)
     else:
-        with open('../review_query/References.txt', 'r') as f:
+        with open('review_query/References.txt', 'r') as f:
             bib_line = bib_text.split('\n')[0]
             if bib_line not in f.read():
-                with open('../review_query/References.txt', 'a') as f:
+                with open('review_query/References.txt', 'a') as f:
                     f.write(bib_text)
 
 
