@@ -1,52 +1,52 @@
 import re
-# import fitz
 import pandas as pd
-# import PyPDF2
 from IPython.display import display, HTML
 from sourcecode.Lit_review_functions import *
-# from sourcecode.Lit_review_functions import col_to_list#, check_if_one_is_downloadable2, highlight_terms, filter_articles3, process_submitted_data, get_bib, create_highlighted_url2, remove_submitted_data_file
 from PyPDF2 import PdfReader, PdfWriter
-import pandas as pd
 import time
-import pandas as pd
 import os
-
+import time
 
 url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
 
 
 
-# use_example = input('Do you want to use the example search term? (y/n): ')
-use_example = 'y'
+use_example = input('Do you want to use the example search term? (y/n): ')
+# use_example = 'y'
 if use_example == 'y':
     # query = "('text-mining' OR 'language model' OR 'artificial intelligence' OR 'natural language processing') AND ('adverse outcome pathway' OR 'biomedical knowledge graph')"
     # print('Searching NCBI for:', query)
     # listy = ['language model', 'natural language processing', 'adverse outcome pathway', 'biomedical knowledge graph', 'artificial intelligence', 'text-mining']
     # name_of_query = 'text-mining_OR_language_model_OR_natural_language_processing_AND_adverse_outcome_pathway_OR_biomedical_knowledge_graph'
-
     # query = "('language model' OR 'natural language processing') AND ('adverse outcome pathway' OR 'biomedical knowledge graph')"
     # name_of_query = 'language_model_OR_natural_language_processing_AND_adverse_outcome_pathway_OR_biomedical_knowledge_graph'
     # query = "('artificial intelligence' OR 'language model' OR 'natural language processing') AND ('adverse outcome pathway' OR 'biomedical knowledge graph')"
     # query = "('text-mining' OR 'artificial intelligence' OR 'language model' OR 'natural language processing') AND ('adverse outcome pathway' OR 'biomedical knowledge graph')"
-    query = "('text-mining' OR 'language model' OR 'natural language processing') AND ('adverse outcome pathway')"
-    name_of_query = 'text-mining_OR_language_model_OR_natural_language_processing_AND_adverse_outcome_pathway'
+    query = "('text-mining' OR 'language model' OR 'natural language processing') AND ('adverse outcome pathway' OR 'biomedical knowledge graph')"
+    name_of_query = query.replace('(', '').replace(')', '').replace(' OR ', '_OR_').replace(' ', '_').replace('\'', '')
     print('Searching NCBI for:', query)
     listy = ['language model', 'natural language processing', 'adverse outcome pathway', 'biomedical knowledge graph', 'artificial intelligence', 'text-mining', 'relation extraction', 'name entity', 'key events', 'event relationship', 'tox', 'artificial intelligence', 'literature', 'existing literature', 'NLP', 'LLMs', 'text-mining', 'text mining', 'fine-tuning', 'mask', 'knowledge', 'network', 'graph', 'toxicology', 'steatosis', 'Entity Recognition', 'Relation Extraction', 'Key Events', 'Event Relationship']
 
-    df = pd.read_csv('data/query_and_hits_NCBI.csv')
-    print('active search on ncbi is off!\n(To turn it on either uncommand the part below this print statement or rerun this script and choose n at the first question)')
-    # print('active search is on!')
-    # pubmed_ids = search_ncbi(query)
-    # new_row = {'Query': query, 'Hits': len(pubmed_ids), 'Date': time.strftime("%Y-%m-%d %H:%M:%S"),
-    #            'Pubmed_ids': pubmed_ids}
-    # table_of_query_n_hits = pd.concat([df, pd.DataFrame([new_row])])
-    # table_of_query_n_hits.to_csv('data/query_and_hits_NCBI.csv', index=False)
-    # table_of_query_n_hits.to_excel('data/query_and_hits_NCBI.xlsx', index=False)
+    if not os.path.exists('data/query_and_hits_NCBI.csv'):
+        df = pd.DataFrame()
+    else:
+        df = pd.read_csv('data/query_and_hits_NCBI.csv')
+    # print('active search on ncbi is off!\n(To turn it on either uncommand the part below this print statement or rerun this script and choose n at the first question)')
+    print('active search is on!\n(To turn it off either command out the part below this print statement or rerun this script and choose n at the first question)')
+    pubmed_ids = search_ncbi(query)
+    new_row = {'Query': query, 'Hits': len(pubmed_ids), 'Date': time.strftime("%Y-%m-%d %H:%M:%S"),
+               'Pubmed_ids': pubmed_ids}
+    table_of_query_n_hits = pd.concat([df, pd.DataFrame([new_row])])
+    table_of_query_n_hits.to_csv('data/query_and_hits_NCBI.csv', index=False)
+    table_of_query_n_hits.to_excel('data/query_and_hits_NCBI.xlsx', index=False)
 
 
 elif use_example == 'n':
     query = input("Please enter a query:\ne.g.\n('text-mining' OR 'language model' OR 'natural language processing') AND ('adverse outcome pathway')\n")
-    name_of_query = input("Please enter a name for the query (no spaces):\ne.g.\ntext-mining_OR_language_model_OR_natural_language_processing_AND_adverse_outcome_pathway\n")
+    default_name_of_query = query.replace('(', '').replace(')', '').replace(' OR ', '_OR_').replace(' ', '_').replace('\'', '')
+    name_of_query = input("Please enter a name for the query (no spaces):\ne.g.\ntext-mining_OR_language_model_OR_natural_language_processing_AND_adverse_outcome_pathway\nOr press enter to use the default name: " + default_name_of_query + "\n")
+    if not name_of_query:
+        name_of_query = default_name_of_query
     listx = input("Lastly, please enter a list of terms to highlight in the title or abstract separated by commas:\ne.g.\nlanguage model, natural language processing, adverse outcome pathway, biomedical knowledge graph, artificial intelligence, text-mining\n")
     listy = listx.split(', ')
     print('active search is on!')
@@ -86,20 +86,20 @@ for pubmed_id in pubmed_ids:
     count += 1
 
     checked_articles = []
-    included_file = os.path.join(outputfolder, 'included_articles_aop.csv')
-    excluded_file = os.path.join(outputfolder, 'excluded_articles_aop.csv')
+    included_file = os.path.join(outputfolder, 'included_articles.csv')
+    excluded_file = os.path.join(outputfolder, 'excluded_articles.csv')
 
     if os.path.exists(included_file) and os.path.getsize(included_file) > 0:
         included_df = pd.read_csv(included_file)
         included_articles = included_df.to_dict('records')
-        checked_articles.extend(included_df['pubmed_id'].astype(str).values)  # Ensure all IDs are strings
+        checked_articles.extend(included_df['pubmed_id'].astype(str).values)
     else:
         included_articles = []
 
     if os.path.exists(excluded_file) and os.path.getsize(excluded_file) > 0:
         excluded_df = pd.read_csv(excluded_file)
         excluded_articles = excluded_df.to_dict('records')
-        checked_articles.extend(excluded_df['pubmed_id'].astype(str).values)  # Ensure all IDs are strings
+        checked_articles.extend(excluded_df['pubmed_id'].astype(str).values)
     else:
         excluded_articles = []
 
@@ -129,8 +129,9 @@ for pubmed_id in pubmed_ids:
     print(f"\nAbstract: {highlighted_abstract}")
     print(f"\nURL: {url}")
 
-    #! 9th of july is query without text-mining and AI!!!!
-    pubmed_id, automatic_screen, reason_auto = filter_articles3(pubmed_id=pubmed_id, search_terms=search_terms, file_name='09-July-2024')
+    current_date = time.strftime("%d-%B-%Y")
+
+    pubmed_id, automatic_screen, reason_auto = filter_articles3(pubmed_id=pubmed_id, search_terms=search_terms, file_name=current_date)
     print(f"\nAutomatic screening for pubmed ID: {pubmed_id}, gave the following result:\n\n{automatic_screen.upper()} \n")#because {reason_auto}.\n")
     # Ask for relevance
     relevance = input(
