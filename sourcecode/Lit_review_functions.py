@@ -23,6 +23,9 @@ def get_pii_by_doi(doi):
                 # print(row)
                 API_KEY = row['api_key']
                 # print('API key:', API_KEY)
+                if API_KEY == 'xxx':
+                    print("API key not found. Add the API key to the 'api_key.csv' file in the current directory (replace xxx with the key).")
+                    return None
 
     # api_key_csv = pd.read_csv('../api_key.csv')
     headers = {
