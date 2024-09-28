@@ -17,7 +17,7 @@ conda activate lit_review
 python Lit_review.py
 ```
 Notes:
-- The clickable link on top of the Dash app will redirect to the article. Hold `Ctrl` and click to open in a new tab. Hold `Shift` and click to open in a new window. Additionally, after opening the article in a new window, this window can be placed on the right side of the screen by pressing `Windows` + `Right arrow` and the Dash app can be placed on the right side of the screen by pressing `Windows` + `Right arrow`, then `Enter`. 
+- The clickable link on top of the Dash app will redirect to the article. Hold `Ctrl` and click to open in a new tab. Hold `Shift` and click to open in a new window. Additionally, after opening the article in a new window, this window can be placed on the right side of the screen by pressing `Windows` + `Right arrow` and the Dash app can be placed on the left side of the screen by pressing `Enter`. 
 - In the Dash app, progress can be saved by clicking the "Save progress" button. Such progress is loaded automatically (if present) when the Dash app is started. The progress is saved in the saved_progress folder by its Pubmed_ID (e.g. `save_in_progress_<Pubmed_ID>.json`).
 - Provided sentences in both the "relevant citations" and "what2write" fields should be separated by two dots ".." (not followed by a space in case of "relevant citations"), except for the last sentence which should have no dot at the end.
 - When you want to stop the Dash app, you can press `Ctrl + C` in the terminal. In case you didn't use `Ctrl + C` but e.g. `Ctrl + z`, you can check which process is using the port 8050 with:
